@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Journey — Striver's A2Z Sheet</title>
+<style>
+:root{
+  --ink:#0d1321;
+  --ink-2:#141d33;
+  --ink-3:#1b2743;
+  --line:#2a3557;
+  --paper:#eef0f5;
+  --paper-dim:#9aa4c2;
+  --amber:#e8a33d;
+  --amber-dim:#c98a2c;
+  --green:#4fb477;
+  --green-dim:#274a37;
+  --red:#e0685a;
+  --red-dim:#4a2c2a;
+  --blue:#5b8de6;
+  --mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --disp: 'Fraunces', 'Georgia', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(232,163,61,.10), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(91,141,230,.08), transparent 60%),
+    var(--ink);
+  color:var(--paper);
+  font-family:var(--sans);
+  min-height:100vh;
+}
+@font-face{font-family:'Fraunces';src:local('Georgia');}
+
+/* ---------- header ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:36px 24px 80px;}
+.hero{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:28px;
+  flex-wrap:wrap;
+}
+.hero-title{font-family:var(--disp);font-weight:600;font-size:44px;letter-spacing:-.5px;margin:0 0 6px;}
+.hero-title em{font-style:italic;color:var(--amber);}
+.hero-sub{color:var(--paper-dim);font-size:14.5px;margin:0;max-width:520px;line-height:1.5;}
+.hero-meta{font-family:var(--mono);font-size:12px;color:var(--paper-dim);text-align:right;line-height:1.9;}
+.hero-meta b{color:var(--amber);font-weight:600;}
+
+/* ---------- dashboard ---------- */
+.dash{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:36px;}
+@media(max-width:820px){.dash{grid-template-columns:1fr;}}
+.card{
+  background:linear-gradient(180deg,var(--ink-2),var(--ink-3));
+  border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+}
+.stat-row{display:flex;align-items:center;gap:28px;}
+.ring{position:relative;width:118px;height:118px;flex:0 0 auto;}
+.ring svg{transform:rotate(-90deg);width:118px;height:118px;}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring-label b{font-family:var(--mono);font-size:24px;color:var(--paper);}
+.ring-label span{font-size:10px;color:var(--paper-dim);letter-spacing:.06em;text-transform:uppercase;}
+.stat-list{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;}
+.stat-item{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dashed var(--line);padding-bottom:8px;}
+.stat-item .k{font-size:12.5px;color:var(--paper-dim);}
+.stat-item .v{font-family:var(--mono);font-size:17px;font-weight:600;}
+.v.solved{color:var(--green);} .v.review{color:var(--amber);} .v.left{color:var(--paper-dim);}
+
+.card h3{margin:0 0 14px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--paper-dim);font-weight:600;}
+.heat{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;}
+.heat i{display:block;aspect-ratio:1;border-radius:2px;background:var(--ink);}
+.heat i.solved{background:var(--green);}
+.heat i.review{background:var(--amber);}
+.heat i.unsolved{background:var(--ink-3);border:1px solid var(--line);}
+.heat-note{margin-top:10px;font-size:11px;color:var(--paper-dim);font-family:var(--mono);}
+
+/* difficulty bars */
+.diffbars{display:flex;flex-direction:column;gap:12px;margin-top:2px;}
+.diffbar-row{display:flex;align-items:center;gap:10px;}
+.diffbar-row .lab{width:58px;font-size:11px;font-family:var(--mono);color:var(--paper-dim);}
+.diffbar-track{flex:1;height:8px;background:var(--ink);border-radius:4px;overflow:hidden;}
+.diffbar-fill{height:100%;border-radius:4px;}
+.diffbar-row .cnt{width:54px;text-align:right;font-family:var(--mono);font-size:11px;color:var(--paper-dim);}
+
+/* ---------- controls ---------- */
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px;position:sticky;top:0;
+  background:linear-gradient(180deg, var(--ink) 80%, transparent); padding:14px 0 10px; z-index:5;}
+.search{
+  flex:1;min-width:180px;background:var(--ink-2);border:1px solid var(--line);border-radius:9px;
+  color:var(--paper);padding:10px 14px;font-family:var(--sans);font-size:13.5px;
+}
+.search:focus{outline:none;border-color:var(--amber-dim);}
+.filter-btn{
+  background:var(--ink-2);border:1px solid var(--line);color:var(--paper-dim);
+  padding:9px 14px;border-radius:9px;font-size:12.5px;font-family:var(--mono);cursor:pointer;transition:.15s;
+}
+.filter-btn:hover{border-color:var(--paper-dim);color:var(--paper);}
+.filter-btn.active{background:var(--amber);border-color:var(--amber);color:var(--ink);font-weight:600;}
+.expand-btn{margin-left:auto;background:none;border:1px solid var(--line);color:var(--paper-dim);border-radius:9px;padding:9px 14px;font-size:12px;cursor:pointer;font-family:var(--mono);}
+.expand-btn:hover{color:var(--paper);}
+
+/* ---------- topics ---------- */
+.topic{border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;background:var(--ink-2);}
+.topic-head{
+  display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;
+}
+.topic-num{font-family:var(--mono);font-size:11px;color:var(--amber);width:34px;flex:0 0 auto;}
+.topic-name{font-family:var(--disp);font-size:19px;font-weight:600;flex:1;}
+.topic-progress-track{width:120px;height:6px;background:var(--ink);border-radius:3px;overflow:hidden;flex:0 0 auto;}
+.topic-progress-fill{height:100%;background:var(--green);}
+.topic-count{font-family:var(--mono);font-size:11.5px;color:var(--paper-dim);width:56px;text-align:right;flex:0 0 auto;}
+.chev{color:var(--paper-dim);transition:transform .2s;flex:0 0 auto;}
+.topic.open .chev{transform:rotate(90deg);}
+.topic-body{display:none;border-top:1px solid var(--line);}
+.topic.open .topic-body{display:block;}
+
+.prob{
+  display:flex;align-items:center;gap:12px;padding:11px 20px 11px 24px;
+  border-bottom:1px solid var(--line);
+}
+.prob:last-child{border-bottom:none;}
+.prob:hover{background:rgba(255,255,255,.02);}
+.prob-idx{font-family:var(--mono);font-size:11px;color:var(--paper-dim);width:26px;flex:0 0 auto;}
+.prob-title{flex:1;font-size:13.8px;min-width:0;}
+.prob-title a{color:var(--paper);text-decoration:none;border-bottom:1px solid transparent;}
+.prob-title a:hover{border-bottom-color:var(--paper-dim);}
+.diff-tag{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:20px;flex:0 0 auto;letter-spacing:.03em;}
+.diff-Easy{color:var(--green);background:var(--green-dim);}
+.diff-Medium{color:var(--amber);background:#4a3a1e;}
+.diff-Hard{color:var(--red);background:var(--red-dim);}
+.status-btns{display:flex;gap:6px;flex:0 0 auto;}
+.sbtn{
+  width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--ink);
+  color:var(--paper-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s;
+}
+.sbtn:hover{border-color:var(--paper-dim);color:var(--paper);}
+.sbtn.solved.active{background:var(--green);border-color:var(--green);color:#0a1f14;}
+.sbtn.review.active{background:var(--amber);border-color:var(--amber);color:#2b1c04;}
+.sbtn.unsolved.active{background:var(--ink-3);border-color:var(--paper-dim);color:var(--paper);}
+
+.empty{padding:40px;text-align:center;color:var(--paper-dim);font-family:var(--mono);font-size:13px;}
+.footer-note{margin-top:30px;color:var(--paper-dim);font-size:11.5px;font-family:var(--mono);line-height:1.7;text-align:center;}
+.footer-note a{color:var(--amber-dim);}
+
+::selection{background:var(--amber);color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div>
+      <h1 class="hero-title">DSA <em>Journey</em></h1>
+      <p class="hero-sub">A working log for Striver's A2Z DSA Sheet — every topic, every problem, tracked from first attempt to solved. Mark progress as you go; it's saved automatically.</p>
+    </div>
+    <div class="hero-meta">
+      SHEET <b>Striver A2Z</b><br>
+      TOPICS <b id="meta-topics">—</b><br>
+      PROBLEMS <b id="meta-total">—</b>
+    </div>
+  </div>
+
+  <div class="dash">
+    <div class="card">
+      <div class="stat-row">
+        <div class="ring">
+          <svg viewBox="0 0 118 118">
+            <circle cx="59" cy="59" r="50" fill="none" stroke="#1b2743" stroke-width="12"/>
+            <circle id="ring-fg" cx="59" cy="59" r="50" fill="none" stroke="#4fb477" stroke-width="12" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314"/>
+          </svg>
+          <div class="ring-label"><b id="ring-pct">0%</b><span>complete</span></div>
+        </div>
+        <div class="stat-list">
+          <div class="stat-item"><span class="k">Solved</span><span class="v solved" id="stat-solved">0</span></div>
+          <div class="stat-item"><span class="k">For review</span><span class="v review" id="stat-review">0</span></div>
+          <div class="stat-item"><span class="k">Remaining</span><span class="v left" id="stat-left">0</span></div>
+          <div class="stat-item"><span class="k">Total</span><span class="v" id="stat-total">0</span></div>
+        </div>
+      </div>
+      <div style="margin-top:20px;">
+        <h3>By difficulty</h3>
+        <div class="diffbars" id="diffbars"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Topic map — each cell is one problem</h3>
+      <div class="heat" id="heatgrid"></div>
+      <div class="heat-note">● green = solved &nbsp; ● amber = review &nbsp; ● dim = unsolved</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input class="search" id="search" placeholder="Search a problem… (e.g. 'two sum', 'kadane')" />
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="unsolved">Unsolved</button>
+    <button class="filter-btn" data-filter="solved">Solved</button>
+    <button class="filter-btn" data-filter="review">Review</button>
+    <button class="expand-btn" id="expand-toggle">Expand all</button>
+  </div>
+
+  <div id="topics"></div>
+
+  <div class="footer-note">Progress is stored privately to your account, per problem — reload anytime, nothing is lost.<br>Problem list follows Striver's A2Z DSA Sheet structure · takeuforward.org</div>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+// [title, difficulty, url]  — url points to LeetCode where a direct match exists, else a takeuforward search.
+const TUF = t => `https://takeuforward.org/plus/dsa/problems?search=${encodeURIComponent(t)}`;
+const LC = s => `https://leetcode.com/problems/${s}/`;
+
+const SHEET = [
+["Learn the Basics",[
+["User Input / Output","Easy",TUF("basic input output")],
+["Data Types","Easy",TUF("data types")],
+["If Else statements","Easy",TUF("if else")],
+["Switch Statement","Easy",TUF("switch statement")],
+["What are arrays","Easy",TUF("arrays intro")],
+["Strings basics","Easy",TUF("strings basics")],
+["For Loops","Easy",TUF("for loops")],
+["While Loops","Easy",TUF("while loop")],
+["Functions","Easy",TUF("functions")],
+["Time Complexity","Easy",TUF("time complexity")],
+["Vectors / Lists","Easy",TUF("vectors")],
+["Set in std library","Easy",TUF("set stl")],
+["Map in std library","Easy",TUF("map stl")],
+["Print Number Patterns","Easy",TUF("number patterns")],
+["Recursion — basics","Easy",TUF("recursion basics")],
+]],
+["Sorting Techniques",[
+["Selection Sort","Easy",TUF("selection sort")],
+["Bubble Sort","Easy",TUF("bubble sort")],
+["Insertion Sort","Easy",TUF("insertion sort")],
+["Merge Sort","Medium",TUF("merge sort")],
+["Recursive Bubble Sort","Medium",TUF("recursive bubble sort")],
+["Recursive Insertion Sort","Medium",TUF("recursive insertion sort")],
+["Quick Sort","Medium",TUF("quick sort")],
+]],
+["Arrays — Easy",[
+["Largest element in array","Easy",TUF("largest element array")],
+["Second Largest Element","Easy",TUF("second largest element")],
+["Check if array is sorted","Easy",LC("check-if-array-is-sorted-and-rotated")],
+["Remove duplicates from sorted array","Easy",LC("remove-duplicates-from-sorted-array")],
+["Left rotate array by one","Easy",TUF("left rotate by one")],
+["Left rotate array by D places","Medium",LC("rotate-array")],
+["Move zeros to end","Easy",LC("move-zeroes")],
+["Linear Search","Easy",LC("linear-search-in-array")],
+["Union of two sorted arrays","Easy",TUF("union of sorted arrays")],
+["Find missing number","Easy",LC("missing-number")],
+["Max consecutive ones","Easy",LC("max-consecutive-ones")],
+["Single number (appears once)","Easy",LC("single-number")],
+["Longest subarray with sum K","Medium",TUF("longest subarray sum k")],
+]],
+["Arrays — Medium",[
+["Two Sum","Easy",LC("two-sum")],
+["Sort array of 0s, 1s, 2s","Medium",LC("sort-colors")],
+["Majority Element (>n/2)","Easy",LC("majority-element")],
+["Kadane's Algorithm — max subarray sum","Medium",LC("maximum-subarray")],
+["Print subarray with max sum","Medium",TUF("print max subarray")],
+["Stock Buy and Sell","Easy",LC("best-time-to-buy-and-sell-stock")],
+["Rearrange array elements by sign","Medium",LC("rearrange-array-elements-by-sign")],
+["Next Permutation","Medium",LC("next-permutation")],
+["Leaders in an array","Medium",TUF("leaders in array")],
+["Longest consecutive sequence","Medium",LC("longest-consecutive-sequence")],
+["Set Matrix Zeroes","Medium",LC("set-matrix-zeroes")],
+["Rotate Matrix by 90 degrees","Medium",LC("rotate-image")],
+["Print matrix in spiral order","Medium",LC("spiral-matrix")],
+["Count subarrays with given sum","Medium",LC("subarray-sum-equals-k")],
+["Pascal's Triangle","Easy",LC("pascals-triangle")],
+["Majority Element II (>n/3)","Medium",LC("majority-element-ii")],
+["3 Sum","Medium",LC("3sum")],
+["4 Sum","Medium",LC("4sum")],
+["Largest subarray with 0 sum","Medium",TUF("largest subarray 0 sum")],
+["Count subarrays with XOR K","Hard",TUF("subarrays xor k")],
+["Merge Overlapping Intervals","Medium",LC("merge-intervals")],
+["Merge two sorted arrays without extra space","Medium",LC("merge-sorted-array")],
+["Find repeating and missing number","Hard",TUF("repeating missing number")],
+["Count Inversions","Hard",TUF("count inversions")],
+["Reverse Pairs","Hard",LC("reverse-pairs")],
+["Maximum Product Subarray","Medium",LC("maximum-product-subarray")],
+]],
+["Binary Search — 1D",[
+["Binary Search","Easy",LC("binary-search")],
+["Lower Bound","Easy",TUF("lower bound")],
+["Upper Bound","Easy",TUF("upper bound")],
+["Search Insert Position","Easy",LC("search-insert-position")],
+["Floor / Ceil in sorted array","Easy",TUF("floor ceil array")],
+["First and Last occurrence","Medium",LC("find-first-and-last-position-of-element-in-sorted-array")],
+["Count occurrences in sorted array","Easy",TUF("count occurrences sorted array")],
+["Search in Rotated Sorted Array I","Medium",LC("search-in-rotated-sorted-array")],
+["Search in Rotated Sorted Array II","Medium",LC("search-in-rotated-sorted-array-ii")],
+["Find minimum in Rotated Sorted Array","Medium",LC("find-minimum-in-rotated-sorted-array")],
+["Find how many times array is rotated","Medium",TUF("times array rotated")],
+["Single Element in Sorted Array","Medium",LC("single-element-in-a-sorted-array")],
+["Find Peak Element","Hard",LC("find-peak-element")],
+]],
+["Binary Search — Answers",[
+["Square root of a number","Easy",LC("sqrtx")],
+["Nth root of a number","Medium",TUF("nth root")],
+["Koko Eating Bananas","Hard",LC("koko-eating-bananas")],
+["Minimum days to make M bouquets","Hard",LC("minimum-number-of-days-to-make-m-bouquets")],
+["Smallest Divisor given a threshold","Medium",LC("find-the-smallest-divisor-given-a-threshold")],
+["Capacity to Ship Packages in D Days","Hard",LC("capacity-to-ship-packages-within-d-days")],
+["Kth missing positive number","Easy",LC("kth-missing-positive-number")],
+["Aggressive Cows","Hard",TUF("aggressive cows")],
+["Book Allocation Problem","Hard",TUF("book allocation")],
+["Split array — largest minimized sum","Hard",LC("split-array-largest-sum")],
+["Painter's Partition Problem","Hard",TUF("painters partition")],
+["Minimize Max Distance to Gas Station","Hard",TUF("minimise max distance gas station")],
+["Median of Two Sorted Arrays","Hard",LC("median-of-two-sorted-arrays")],
+["Kth element of two sorted arrays","Medium",TUF("kth element two sorted arrays")],
+]],
+["Binary Search — 2D / Matrix",[
+["Search in a 2D Matrix","Medium",LC("search-a-2d-matrix")],
+["Search in row/col-wise sorted matrix","Medium",LC("search-a-2d-matrix-ii")],
+["Find peak element in 2D matrix","Hard",LC("find-a-peak-element-ii")],
+["Median in row-wise sorted Matrix","Hard",TUF("median row wise sorted matrix")],
+]],
+["Strings — Basic",[
+["Remove outermost parentheses","Easy",LC("remove-outermost-parentheses")],
+["Reverse words in a string","Medium",LC("reverse-words-in-a-string")],
+["Largest odd number in string","Easy",LC("largest-odd-number-in-string")],
+["Longest Common Prefix","Easy",LC("longest-common-prefix")],
+["Isomorphic Strings","Easy",LC("isomorphic-strings")],
+["Check rotation / anagram","Easy",LC("valid-anagram")],
+["Sort characters by frequency","Medium",LC("sort-characters-by-frequency")],
+["Maximum Nesting Depth of Parentheses","Easy",LC("maximum-nesting-depth-of-the-parentheses")],
+]],
+["Strings — Medium/Hard",[
+["Roman to Integer","Medium",LC("roman-to-integer")],
+["Implement Atoi (String to Integer)","Medium",LC("string-to-integer-atoi")],
+["Longest Palindromic Substring","Medium",LC("longest-palindromic-substring")],
+["Rabin-Karp / string matching","Hard",LC("repeated-string-match")],
+["Z-Function","Hard",TUF("z function")],
+["Minimum characters to add for palindrome","Hard",TUF("min char add palindrome")],
+["Count and Say","Medium",LC("count-and-say")],
+["Compare Version Numbers","Medium",LC("compare-version-numbers")],
+]],
+["Linked List",[
+["Introduction to LinkedList","Easy",TUF("intro linked list")],
+["Insert node in LinkedList","Easy",TUF("insert linked list")],
+["Delete node in LinkedList","Easy",LC("delete-node-in-a-linked-list")],
+["Find length of LinkedList","Easy",TUF("length linked list")],
+["Search element in LinkedList","Easy",TUF("search linked list")],
+["Introduction to Doubly LinkedList","Easy",TUF("doubly linked list")],
+["Insert/Delete in Doubly LinkedList","Easy",TUF("insert delete doubly linked list")],
+["Reverse a Doubly LinkedList","Easy",LC("reverse-linked-list")],
+["Middle of a LinkedList","Easy",LC("middle-of-the-linked-list")],
+["Reverse a LinkedList (iterative & recursive)","Medium",LC("reverse-linked-list")],
+["Detect a cycle in LinkedList","Medium",LC("linked-list-cycle")],
+["Find starting point of a Loop","Medium",LC("linked-list-cycle-ii")],
+["Length of Loop in LinkedList","Medium",TUF("length of loop linked list")],
+["Check if LinkedList is palindrome","Medium",LC("palindrome-linked-list")],
+["Segregate odd-even nodes","Medium",LC("odd-even-linked-list")],
+["Remove Nth node from back","Medium",LC("remove-nth-node-from-end-of-list")],
+["Delete the middle node","Medium",LC("delete-the-middle-node-of-a-linked-list")],
+["Sort a LinkedList","Medium",LC("sort-list")],
+["Sort LL of 0s,1s,2s","Medium",TUF("sort linked list 012")],
+["Find intersection point of Y LinkedList","Medium",LC("intersection-of-two-linked-lists")],
+["Add 1 to a number in LinkedList","Medium",TUF("add 1 linked list")],
+["Add two numbers as LinkedList","Medium",LC("add-two-numbers")],
+["Copy List with Random Pointer","Hard",LC("copy-list-with-random-pointer")],
+["Reverse LinkedList in groups of size K","Hard",LC("reverse-nodes-in-k-group")],
+["Rotate a LinkedList","Medium",LC("rotate-list")],
+["Flattening a LinkedList","Hard",TUF("flatten a linked list")],
+["Merge two sorted LinkedLists","Easy",LC("merge-two-sorted-lists")],
+["Merge K sorted lists","Hard",LC("merge-k-sorted-lists")],
+]],
+["Recursion",[
+["Print all subsequences (power set)","Medium",LC("subsets")],
+["Subsequences with sum K","Medium",TUF("subsequences sum k")],
+["Combination Sum","Medium",LC("combination-sum")],
+["Combination Sum II","Medium",LC("combination-sum-ii")],
+["Subset Sum I","Medium",LC("subsets")],
+["Subset Sum II","Medium",LC("subsets-ii")],
+["Combination Sum III","Medium",LC("combination-sum-iii")],
+["Letter Combinations of Phone number","Medium",LC("letter-combinations-of-a-phone-number")],
+["Palindrome Partitioning","Medium",LC("palindrome-partitioning")],
+["Word Search","Medium",LC("word-search")],
+["N Queens","Hard",LC("n-queens")],
+["Rat in a Maze","Hard",TUF("rat in a maze")],
+["Word Break","Medium",LC("word-break")],
+["M-Coloring Problem","Hard",TUF("m coloring problem")],
+["Sudoku Solver","Hard",LC("sudoku-solver")],
+["Expression Add Operators","Hard",LC("expression-add-operators")],
+]],
+["Bit Manipulation",[
+["Introduction to Bit Manipulation","Easy",TUF("bit manipulation intro")],
+["Check if the ith bit is set","Easy",TUF("check ith bit set")],
+["Check odd or even using bits","Easy",TUF("check odd even bits")],
+["Check if a number is power of 2","Easy",LC("power-of-two")],
+["Count number of set bits","Easy",LC("number-of-1-bits")],
+["Set/Unset the rightmost unset bit","Medium",TUF("rightmost unset bit")],
+["Swap two numbers","Easy",TUF("swap two numbers bits")],
+["Divide two integers without operator","Medium",LC("divide-two-integers")],
+["Count number of bits to flip","Easy",LC("bitwise-and-of-numbers-range")],
+["Find the number appearing odd times","Easy",LC("single-number")],
+["Find the two numbers appearing once","Medium",LC("single-number-iii")],
+["Power Set using bits","Medium",LC("subsets")],
+["Find XOR of numbers 1 to N","Easy",TUF("xor 1 to n")],
+["Sum of XOR of all subarrays","Hard",TUF("xor subarrays sum")],
+]],
+["Stack and Queue",[
+["Implement Stack using Array","Easy",TUF("stack using array")],
+["Implement Queue using Array","Easy",TUF("queue using array")],
+["Implement Stack using Queue","Easy",LC("implement-stack-using-queues")],
+["Implement Queue using Stack","Easy",LC("implement-queue-using-stacks")],
+["Implement stack using LinkedList","Easy",TUF("stack using linked list")],
+["Check balanced parentheses","Easy",LC("valid-parentheses")],
+["Implement Min Stack","Medium",LC("min-stack")],
+["Next Greater Element","Easy",LC("next-greater-element-i")],
+["Next Smaller Element","Easy",TUF("next smaller element")],
+["Number of NGEs to the right","Medium",TUF("number of nges to the right")],
+["Trapping Rainwater","Hard",LC("trapping-rain-water")],
+["Sum of subarray minimums","Medium",LC("sum-of-subarray-minimums")],
+["Asteroid Collision","Medium",LC("asteroid-collision")],
+["Sum of subarray ranges","Medium",LC("sum-of-subarray-ranges")],
+["Remove K Digits","Medium",LC("remove-k-digits")],
+["Largest rectangle in histogram","Hard",LC("largest-rectangle-in-histogram")],
+["Maximal Rectangle","Hard",LC("maximal-rectangle")],
+["Sliding Window Maximum","Hard",LC("sliding-window-maximum")],
+["Stock span problem","Medium",LC("online-stock-span")],
+["The Celebrity Problem","Hard",TUF("celebrity problem")],
+["LRU Cache","Hard",LC("lru-cache")],
+["LFU Cache","Hard",LC("lfu-cache")],
+]],
+["Sliding Window & Two Pointer",[
+["Longest Substring Without Repeating Characters","Medium",LC("longest-substring-without-repeating-characters")],
+["Max Consecutive Ones III","Medium",LC("max-consecutive-ones-iii")],
+["Fruit Into Baskets","Medium",LC("fruit-into-baskets")],
+["Longest repeating character replacement","Medium",LC("longest-repeating-character-replacement")],
+["Binary subarray with sum","Medium",LC("binary-subarrays-with-sum")],
+["Count number of nice subarrays","Medium",LC("count-number-of-nice-subarrays")],
+["Number of substrings containing all 3","Medium",LC("number-of-substrings-containing-all-three-characters")],
+["Max points from cards","Medium",LC("maximum-points-you-can-obtain-from-cards")],
+["Longest substring with at most K distinct","Hard",LC("longest-substring-with-at-most-k-distinct-characters")],
+["Subarray with K different integers","Hard",LC("subarrays-with-k-different-integers")],
+["Minimum Window Substring","Hard",LC("minimum-window-substring")],
+["Minimum window with all characters","Hard",TUF("min window all characters")],
+]],
+["Heaps",[
+["Introduction to Priority Queues","Easy",TUF("priority queue intro")],
+["Min Heap and Max Heap Implementation","Medium",TUF("min max heap implementation")],
+["Check if array represents a Heap","Medium",TUF("check array heap")],
+["Convert min Heap to max Heap","Medium",TUF("min heap to max heap")],
+["Kth Largest Element","Easy",LC("kth-largest-element-in-an-array")],
+["Kth Smallest Element","Easy",TUF("kth smallest element")],
+["Sort a nearly sorted array","Medium",LC("sort-an-array")],
+["K closest points to origin","Medium",LC("k-closest-points-to-origin")],
+["Top K Frequent Elements","Medium",LC("top-k-frequent-elements")],
+["Merge K Sorted Arrays","Hard",TUF("merge k sorted arrays")],
+["Minimum Cost to connect ropes","Medium",TUF("minimum cost connect ropes")],
+["Find Median from Data Stream","Hard",LC("find-median-from-data-stream")],
+["Task Scheduler","Medium",LC("task-scheduler")],
+["Hand of Straights","Medium",LC("hand-of-straights")],
+]],
+["Greedy Algorithms",[
+["Assign Cookies","Easy",LC("assign-cookies")],
+["Lemonade Change","Easy",LC("lemonade-change")],
+["Shortest Job first / N meetings in one room","Medium",TUF("n meetings in one room")],
+["Jump Game","Medium",LC("jump-game")],
+["Jump Game II","Medium",LC("jump-game-ii")],
+["Minimum number of platforms","Medium",TUF("minimum number of platforms")],
+["Job sequencing Problem","Medium",TUF("job sequencing problem")],
+["Candy","Hard",LC("candy")],
+["Fractional Knapsack","Medium",TUF("fractional knapsack")],
+["Insert Interval","Medium",LC("insert-interval")],
+["Non-overlapping Intervals","Medium",LC("non-overlapping-intervals")],
+["Valid Parenthesis String","Medium",LC("valid-parenthesis-string")],
+]],
+["Binary Trees",[
+["Introduction to Trees","Easy",TUF("intro trees")],
+["Preorder Traversal","Easy",LC("binary-tree-preorder-traversal")],
+["Inorder Traversal","Easy",LC("binary-tree-inorder-traversal")],
+["Postorder Traversal","Easy",LC("binary-tree-postorder-traversal")],
+["Level order Traversal","Medium",LC("binary-tree-level-order-traversal")],
+["Iterative Preorder Traversal","Medium",TUF("iterative preorder")],
+["Iterative Inorder Traversal","Medium",TUF("iterative inorder")],
+["Postorder using 2 stacks","Medium",TUF("postorder 2 stacks")],
+["Postorder using 1 stack","Hard",TUF("postorder 1 stack")],
+["Preorder Inorder Postorder in one traversal","Hard",TUF("all traversals one pass")],
+["Height of a Binary Tree","Easy",LC("maximum-depth-of-binary-tree")],
+["Check for Balanced Binary Tree","Medium",LC("balanced-binary-tree")],
+["Diameter of Binary Tree","Easy",LC("diameter-of-binary-tree")],
+["Maximum path sum","Hard",LC("binary-tree-maximum-path-sum")],
+["Check if two trees are identical","Easy",LC("same-tree")],
+["Zig Zag Traversal","Medium",LC("binary-tree-zigzag-level-order-traversal")],
+["Boundary Traversal","Medium",TUF("boundary traversal")],
+["Vertical Order Traversal","Hard",LC("vertical-order-traversal-of-a-binary-tree")],
+["Top View of Binary Tree","Medium",TUF("top view binary tree")],
+["Bottom View of Binary Tree","Medium",TUF("bottom view binary tree")],
+["Right/Left View of Binary Tree","Medium",LC("binary-tree-right-side-view")],
+["Symmetric Binary Tree","Easy",LC("symmetric-tree")],
+["Root to Node Path","Medium",TUF("root to node path")],
+["LCA in Binary Tree","Medium",LC("lowest-common-ancestor-of-a-binary-tree")],
+["Maximum width of Binary Tree","Medium",LC("maximum-width-of-binary-tree")],
+["Children Sum Property","Medium",TUF("children sum property")],
+["Print all nodes at distance K","Medium",LC("all-nodes-distance-k-in-binary-tree")],
+["Minimum time to burn binary tree","Hard",TUF("minimum time to burn tree")],
+["Count total nodes in complete binary tree","Medium",LC("count-complete-tree-nodes")],
+["Serialize and Deserialize Binary Tree","Hard",LC("serialize-and-deserialize-binary-tree")],
+["Flatten Binary Tree to LinkedList","Medium",LC("flatten-binary-tree-to-linked-list")],
+["Construct tree from preorder & inorder","Hard",LC("construct-binary-tree-from-preorder-and-inorder-traversal")],
+["Construct tree from postorder & inorder","Hard",LC("construct-binary-tree-from-inorder-and-postorder-traversal")],
+]],
+["Binary Search Trees",[
+["Introduction to BST","Easy",TUF("intro bst")],
+["Search in a BST","Easy",LC("search-in-a-binary-search-tree")],
+["Find Min/Max in BST","Easy",TUF("min max bst")],
+["Ceil in a BST","Easy",TUF("ceil in bst")],
+["Floor in a BST","Easy",TUF("floor in bst")],
+["Insert a given Node in BST","Medium",LC("insert-into-a-binary-search-tree")],
+["Delete a Node in BST","Medium",LC("delete-node-in-a-bst")],
+["Kth Smallest/Largest in BST","Medium",LC("kth-smallest-element-in-a-bst")],
+["Check if tree is BST","Medium",LC("validate-binary-search-tree")],
+["LCA in a BST","Medium",LC("lowest-common-ancestor-of-a-binary-search-tree")],
+["Construct BST from preorder","Medium",LC("construct-binary-search-tree-from-preorder-traversal")],
+["Inorder Successor/Predecessor in BST","Medium",LC("inorder-successor-in-bst")],
+["BST Iterator","Medium",LC("binary-search-tree-iterator")],
+["Two Sum in BST","Medium",LC("two-sum-iv-input-is-a-bst")],
+["Recover BST (swapped nodes)","Hard",LC("recover-binary-search-tree")],
+["Largest BST in Binary Tree","Hard",LC("largest-bst-subtree")],
+]],
+["Graphs",[
+["Graph and types","Easy",TUF("graph types")],
+["Graph Representation","Easy",TUF("graph representation")],
+["BFS Traversal","Medium",TUF("bfs traversal")],
+["DFS Traversal","Medium",TUF("dfs traversal")],
+["Number of provinces","Medium",LC("number-of-provinces")],
+["Number of Islands","Medium",LC("number-of-islands")],
+["Flood Fill","Easy",LC("flood-fill")],
+["Rotten Oranges","Medium",LC("rotting-oranges")],
+["Detect cycle in undirected graph (BFS/DFS)","Medium",TUF("detect cycle undirected")],
+["Bipartite Graph (BFS/DFS)","Medium",LC("is-graph-bipartite")],
+["Detect cycle in directed graph (DFS)","Medium",TUF("detect cycle directed dfs")],
+["Topological Sort (BFS & DFS)","Medium",LC("course-schedule-ii")],
+["Course Schedule I & II","Medium",LC("course-schedule")],
+["Number of Enclaves","Medium",LC("number-of-enclaves")],
+["Number of Distinct Islands","Medium",TUF("number of distinct islands")],
+["Word Ladder I","Hard",LC("word-ladder")],
+["Word Ladder II","Hard",LC("word-ladder-ii")],
+["Dijkstra's Algorithm","Medium",TUF("dijkstra algorithm")],
+["Print shortest path Dijkstra","Medium",TUF("print shortest path dijkstra")],
+["Shortest path in undirected weighted graph","Medium",TUF("shortest path undirected weighted")],
+["Shortest path in DAG","Hard",TUF("shortest path dag")],
+["Bellman Ford Algorithm","Medium",TUF("bellman ford")],
+["Floyd Warshall Algorithm","Medium",TUF("floyd warshall")],
+["Find the city with smallest neighbors","Medium",LC("find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance")],
+["Minimum Spanning Tree — Prim's","Medium",TUF("prims algorithm")],
+["Disjoint Set (Union by rank/size)","Medium",TUF("disjoint set union find")],
+["Kruskal's Algorithm","Medium",TUF("kruskal algorithm")],
+["Number of operations to connect network","Medium",LC("number-of-operations-to-make-network-connected")],
+["Accounts Merge","Hard",LC("accounts-merge")],
+["Number of islands II","Hard",LC("number-of-islands-ii")],
+["Making a large island","Hard",LC("making-a-large-island")],
+["Swim in rising water","Hard",LC("swim-in-rising-water")],
+["Strongly Connected Components — Kosaraju","Hard",TUF("kosaraju algorithm")],
+["Bridges in Graph","Hard",LC("critical-connections-in-a-network")],
+["Articulation Points","Hard",TUF("articulation points")],
+]],
+["Dynamic Programming",[
+["Introduction to DP","Easy",TUF("intro dp")],
+["Climbing Stairs","Easy",LC("climbing-stairs")],
+["Frog Jump","Easy",TUF("frog jump")],
+["Minimal cost with K forward jumps","Medium",TUF("frog jump k steps")],
+["Maximum sum of non-adjacent elements","Medium",LC("house-robber")],
+["House Robber II","Medium",LC("house-robber-ii")],
+["Ninja's Training (DP on grids)","Medium",TUF("ninjas training")],
+["Grid Unique Paths","Medium",LC("unique-paths")],
+["Grid Unique Paths II (obstacles)","Medium",LC("unique-paths-ii")],
+["Minimum path sum in grid","Medium",LC("minimum-path-sum")],
+["Triangle — Fixed Starting Point","Medium",LC("triangle")],
+["Minimum/Maximum Falling Path Sum","Medium",LC("minimum-falling-path-sum")],
+["3D DP — cherry pickup","Hard",LC("cherry-pickup-ii")],
+["Subset sum equal to target","Medium",LC("partition-equal-subset-sum")],
+["Partition into two subsets with min diff","Hard",TUF("min subset sum diff")],
+["Count subsets with sum K","Medium",LC("target-sum")],
+["Count partitions with given diff","Hard",TUF("count partitions given diff")],
+["0/1 Knapsack","Medium",TUF("0 1 knapsack")],
+["Minimum coins (coin change)","Medium",LC("coin-change")],
+["Target Sum","Medium",LC("target-sum")],
+["Coin change II — no. of ways","Medium",LC("coin-change-ii")],
+["Unbounded Knapsack","Medium",TUF("unbounded knapsack")],
+["Rod Cutting Problem","Medium",TUF("rod cutting problem")],
+["Longest Common Subsequence","Medium",LC("longest-common-subsequence")],
+["Longest Common Substring","Medium",TUF("longest common substring")],
+["Longest Palindromic Subsequence","Medium",LC("longest-palindromic-subsequence")],
+["Minimum insertions to make palindrome","Hard",LC("minimum-insertion-steps-to-make-a-string-palindrome")],
+["Min Insertions/Deletions to convert A to B","Hard",LC("delete-operation-for-two-strings")],
+["Shortest Common Supersequence","Hard",LC("shortest-common-supersequence")],
+["Distinct Subsequences","Hard",LC("distinct-subsequences")],
+["Edit Distance","Hard",LC("edit-distance")],
+["Wildcard Matching","Hard",LC("wildcard-matching")],
+["Best time to Buy/Sell Stock (all variants)","Hard",LC("best-time-to-buy-and-sell-stock-iii")],
+["Longest Increasing Subsequence","Medium",LC("longest-increasing-subsequence")],
+["Printing Longest Increasing Subsequence","Hard",TUF("print lis")],
+["Largest Divisible Subset","Medium",LC("largest-divisible-subset")],
+["Longest string chain","Medium",LC("longest-string-chain")],
+["Longest Bitonic subsequence","Medium",TUF("longest bitonic subsequence")],
+["Number of Longest Increasing Subsequences","Hard",LC("number-of-longest-increasing-subsequence")],
+["Matrix Chain Multiplication","Hard",TUF("matrix chain multiplication")],
+["Minimum cost to cut the stick","Hard",LC("minimum-cost-to-cut-a-stick")],
+["Burst Balloons","Hard",LC("burst-balloons")],
+["Evaluate boolean expression to true","Hard",TUF("boolean expression true")],
+["Palindrome Partitioning II — min cuts","Hard",LC("palindrome-partitioning-ii")],
+["Partition Array for Maximum Sum","Hard",LC("partition-array-for-maximum-sum")],
+["Maximum Rectangle area with all 1's","Hard",LC("maximal-rectangle")],
+["Count square submatrices with all ones","Medium",LC("count-square-submatrices-with-all-ones")],
+]],
+["Tries",[
+["Implement TRIE (insert/search/prefix)","Hard",LC("implement-trie-prefix-tree")],
+["Implement Trie II (count prefix/word)","Hard",TUF("implement trie 2")],
+["Longest string with all prefixes","Medium",LC("longest-word-in-dictionary")],
+["Number of distinct substrings using Trie","Medium",TUF("distinct substrings trie")],
+["Maximum XOR of two numbers in array","Hard",LC("maximum-xor-of-two-numbers-in-an-array")],
+["Maximum XOR with an element from array","Hard",LC("maximum-xor-with-an-element-from-array")],
+]]
+];
+
+/* ---------------- STATE ---------------- */
+let PROGRESS = {}; // { "topicIdx-probIdx": "solved"|"unsolved"|"review" }
+let expanded = {};
+let currentFilter = "all";
+let allExpanded = false;
+
+async function loadProgress(){
+  try{
+    const res = await window.storage.get('dsa-progress-v1');
+    if(res && res.value) PROGRESS = JSON.parse(res.value);
+  }catch(e){ /* no data yet */ }
+  render();
+}
+async function saveProgress(){
+  try{ await window.storage.set('dsa-progress-v1', JSON.stringify(PROGRESS)); }
+  catch(e){ console.error('save failed', e); }
+}
+
+function pid(ti,pi){ return ti+'-'+pi; }
+function statusOf(ti,pi){ return PROGRESS[pid(ti,pi)] || 'unsolved'; }
+function setStatus(ti,pi,status){
+  const key = pid(ti,pi);
+  if(PROGRESS[key] === status){ delete PROGRESS[key]; } // toggle off
+  else{ PROGRESS[key] = status; }
+  saveProgress();
+  render();
+}
+
+/* ---------------- RENDER ---------------- */
+function computeStats(){
+  let total=0, solved=0, review=0;
+  let diff = {Easy:{t:0,s:0}, Medium:{t:0,s:0}, Hard:{t:0,s:0}};
+  SHEET.forEach((topic,ti)=>{
+    topic[1].forEach((p,pi)=>{
+      total++;
+      diff[p[1]].t++;
+      const st = statusOf(ti,pi);
+      if(st==='solved'){ solved++; diff[p[1]].s++; }
+      if(st==='review') review++;
+    });
+  });
+  return {total, solved, review, left: total-solved, diff};
+}
+
+function render(){
+  const stats = computeStats();
+  document.getElementById('meta-topics').textContent = SHEET.length;
+  document.getElementById('meta-total').textContent = stats.total;
+  document.getElementById('stat-solved').textContent = stats.solved;
+  document.getElementById('stat-review').textContent = stats.review;
+  document.getElementById('stat-left').textContent = stats.left;
+  document.getElementById('stat-total').textContent = stats.total;
+
+  const pct = stats.total ? Math.round(stats.solved/stats.total*100) : 0;
+  document.getElementById('ring-pct').textContent = pct+'%';
+  const circ = 314;
+  document.getElementById('ring-fg').setAttribute('stroke-dashoffset', circ - (circ*pct/100));
+
+  const dbEl = document.getElementById('diffbars');
+  dbEl.innerHTML = '';
+  const colors = {Easy:'#4fb477', Medium:'#e8a33d', Hard:'#e0685a'};
+  ['Easy','Medium','Hard'].forEach(d=>{
+    const {t,s} = stats.diff[d];
+    const p = t ? Math.round(s/t*100) : 0;
+    const row = document.createElement('div');
+    row.className='diffbar-row';
+    row.innerHTML = `<div class="lab">${d}</div><div class="diffbar-track"><div class="diffbar-fill" style="width:${p}%;background:${colors[d]}"></div></div><div class="cnt">${s}/${t}</div>`;
+    dbEl.appendChild(row);
+  });
+
+  // heat grid
+  const heat = document.getElementById('heatgrid');
+  heat.innerHTML = '';
+  SHEET.forEach((topic,ti)=>{
+    topic[1].forEach((p,pi)=>{
+      const st = statusOf(ti,pi);
+      const i = document.createElement('i');
+      i.className = st;
+      i.title = topic[0]+': '+p[0];
+      heat.appendChild(i);
+    });
+  });
+
+  renderTopics();
+}
+
+function renderTopics(){
+  const container = document.getElementById('topics');
+  container.innerHTML = '';
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let anyVisible = false;
+
+  SHEET.forEach((topic,ti)=>{
+    const [name, problems] = topic;
+    const filteredProbs = problems.map((p,pi)=>({p,pi})).filter(({p,pi})=>{
+      const st = statusOf(ti,pi);
+      const matchesFilter = currentFilter==='all' || st===currentFilter;
+      const matchesSearch = !q || p[0].toLowerCase().includes(q);
+      return matchesFilter && matchesSearch;
+    });
+    if(filteredProbs.length===0) return;
+    anyVisible = true;
+
+    let solvedCount=0;
+    problems.forEach((p,pi)=>{ if(statusOf(ti,pi)==='solved') solvedCount++; });
+    const pct = Math.round(solvedCount/problems.length*100);
+
+    const topicEl = document.createElement('div');
+    topicEl.className = 'topic' + ((expanded[ti]||allExpanded||q||currentFilter!=='all') ? ' open':'');
+
+    const head = document.createElement('div');
+    head.className='topic-head';
+    head.innerHTML = `
+      <div class="topic-num">${String(ti+1).padStart(2,'0')}</div>
+      <div class="topic-name">${name}</div>
+      <div class="topic-progress-track"><div class="topic-progress-fill" style="width:${pct}%"></div></div>
+      <div class="topic-count">${solvedCount}/${problems.length}</div>
+      <div class="chev">&#9656;</div>
+    `;
+    head.onclick = ()=>{ expanded[ti] = !((expanded[ti]||allExpanded)); allExpanded=false; renderTopics(); };
+    topicEl.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className='topic-body';
+    filteredProbs.forEach(({p,pi})=>{
+      const [title,diff,url] = p;
+      const st = statusOf(ti,pi);
+      const row = document.createElement('div');
+      row.className='prob';
+      row.innerHTML = `
+        <div class="prob-idx">${pi+1}</div>
+        <div class="prob-title"><a href="${url}" target="_blank" rel="noopener">${title}</a></div>
+        <div class="diff-tag diff-${diff}">${diff}</div>
+        <div class="status-btns">
+          <button class="sbtn unsolved ${st==='unsolved'?'active':''}" title="Unsolved">○</button>
+          <button class="sbtn review ${st==='review'?'active':''}" title="Mark for review">◐</button>
+          <button class="sbtn solved ${st==='solved'?'active':''}" title="Solved">✓</button>
+        </div>
+      `;
+      const [bU,bR,bS] = row.querySelectorAll('.sbtn');
+      bU.onclick = ()=> setStatus(ti,pi,'unsolved');
+      bR.onclick = ()=> setStatus(ti,pi,'review');
+      bS.onclick = ()=> setStatus(ti,pi,'solved');
+      body.appendChild(row);
+    });
+    topicEl.appendChild(body);
+    container.appendChild(topicEl);
+  });
+
+  if(!anyVisible){
+    container.innerHTML = '<div class="empty">No problems match this filter/search.</div>';
+  }
+}
+
+/* ---------------- EVENTS ---------------- */
+document.getElementById('search').addEventListener('input', renderTopics);
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderTopics();
+  });
+});
+document.getElementById('expand-toggle').addEventListener('click', (e)=>{
+  allExpanded = !allExpanded;
+  expanded = {};
+  e.target.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+  renderTopics();
+});
+
+loadProgress();
+</script>
+</body>
+</html>
